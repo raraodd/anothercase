@@ -13,14 +13,14 @@ public class DataStoreLoad {
 
         int i = 0;
         for (String str: keyValueArray) {
-            HashMap dict = new HashMap<String,String>();
+            HashMap map = new HashMap<String,String>();
             for (String subStr: str.split(";")) {
                 String[] keyValuePair = subStr.split("=");
                 String key = keyValuePair[0];
                 String value = keyValuePair[1];
-                dict.put(key, value);
+                map.put(key, value);
             }
-            A[i] = dict;
+            A[i] = map;
             i += 1;
         }
 
@@ -45,5 +45,17 @@ public class DataStoreLoad {
             }
         }
         return builder.toString();
+    }
+
+    public static void main(String[] args) {
+
+        // Change input string here
+        String input = "key1=value1;key2=value2\nkeyA=valueA";
+
+        DataStoreLoad dataStoreLoad = new DataStoreLoad();
+        HashMap[] map = dataStoreLoad.loadStringToArray(input);
+        String strKeyValue = dataStoreLoad.storeArrayMapToString(map);
+
+        System.out.println(strKeyValue);
     }
 }
