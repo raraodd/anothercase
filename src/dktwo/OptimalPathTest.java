@@ -3,6 +3,8 @@ package dktwo;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static org.junit.Assert.*;
 
@@ -11,20 +13,28 @@ public class OptimalPathTest {
     @Test
     public void setupInput() throws FileNotFoundException {
         int[] weight;
-        boolean[][] edges;
+        Queue[] edges;
 
         OptimalPath test = new OptimalPath("input01.txt");
         weight = new int[]{0,1,2,2};
         assertArrayEquals(weight, test.weight);
-        edges= new boolean[test.N+1][test.N+1];
-        edges[1][2] = edges[1][3] = edges[2][3] = true;
+        edges= new Queue[test.N+1];
+        edges[1] = new LinkedList();
+        edges[1].add(2); edges[1].add(3);
+        edges[2] = new LinkedList();
+        edges[2].add(3);
         assertArrayEquals(edges, test.edges);
 
         test.setupInput("input02.txt");
-        weight = new int[]{0, 0,10,2,3,1};
+        weight = new int[]{0,0,10,2,3,1};
         assertArrayEquals(weight, test.weight);
-        edges= new boolean[test.N+1][test.N+1];
-        edges[1][2] = edges[1][5] = edges[5][3] = edges[3][4] = true;
+        edges= new Queue[test.N+1];
+        edges[1] = new LinkedList();
+        edges[1].add(2); edges[1].add(5);
+        edges[5] = new LinkedList();
+        edges[5].add(3);
+        edges[3] = new LinkedList();
+        edges[3].add(4);
         assertArrayEquals(edges, test.edges);
     }
 
