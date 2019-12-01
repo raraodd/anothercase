@@ -1,32 +1,32 @@
 package dktwo;
 
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
 
 public class OptimalPath {
 
-    int M, N;
-    int weight[];
-    boolean edges[][];
-    boolean visited[];
-    int max = 0;
+    private int M, N, origin;
+    private int weight[];
+    private Queue edges[];
 
-    public OptimalPath(String filename) throws FileNotFoundException {
+    private OptimalPath(String filename) throws FileNotFoundException {
         setupInput(filename);
     }
 
-    public void setupInput(String filename) throws FileNotFoundException {
+    private void setupInput(String filename) throws FileNotFoundException {
         String currentDirectory = System.getProperty("user.dir");
 
-        System.setIn(new java.io.FileInputStream(currentDirectory + "/src/dktwo/" + filename));
+        if (filename != null) {
+            System.setIn(new java.io.FileInputStream(currentDirectory + "/src/dktwo/" + filename));
+        }
         Scanner sc = new Scanner(System.in);
 
         N = sc.nextInt(); // vertices
         M = sc.nextInt(); // edges
+        origin = sc.nextInt(); // origin
 
         weight = new int[N+1];
-        edges = new boolean[N+1][N+1];
-        visited = new boolean[N+1];
+        edges = new Queue[N+1];
 
         for (int i = 1; i <= N; i++) {
             weight[i] = sc.nextInt();
@@ -36,33 +36,45 @@ public class OptimalPath {
         for (int i = 0; i < M; i++) {
             int x = sc.nextInt();
             int y = sc.nextInt();
-            edges[x][y] = true;
+            if (edges[x] == null) edges[x] = new LinkedList<>();
+            edges[x].add(y);
             System.out.println(x + " -> " + y);
         }
     }
 
-    public int getMaximumPath() {
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                doRecursive(i, j, weight[i]);
-            }
+    private int getMaximumPath() {
+        int result, max = 0;
+
+        Iterator<Integer> iterator = edges[origin].iterator();
+
+        while (iterator.hasNext()) {
+            result = doRecursive(origin, iterator.next()) + weight[origin];
+            max = result > max ? result : max;
         }
+
         return max;
     }
 
-    private void doRecursive(int from, int to, int sum) {
-        if (!edges[from][to]) return;
-        if (visited[to]) return;
+    private int doRecursive(int from, int to) {
+        if (!edges[from].contains(to)) return 0;
+        if (edges[to] == null) return weight[to];
+        int result, max = 0;
 
-        visited[to] = true;
-        sum += weight[to];
-        max = sum > max ? sum : max;
+        Iterator<Integer> iterator = edges[to].iterator();
 
-        for (int i = 1; i <= N; i++)
+        while (iterator.hasNext()) {
+            result = doRecursive(to, iterator.next());
+            max = result > max ? result : max;
+        }
 
-            doRecursive(to, i, sum);
+        return max + weight[to];
+    }
 
-        visited[to] = false;
-        sum -= weight[to];
+    public static void main(String[] args) throws FileNotFoundException {
+
+        OptimalPath optimalPath = new OptimalPath("input03.txt");
+
+        int maxPath = optimalPath.getMaximumPath();
+        System.out.println("Maximum path: " + maxPath);
     }
 }
