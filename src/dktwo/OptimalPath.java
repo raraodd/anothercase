@@ -5,15 +5,15 @@ import java.util.*;
 
 public class OptimalPath {
 
-    private int M, N, origin;
-    private int weight[];
-    private Queue edges[];
+    public int M, N, origin;
+    public int weight[];
+    public Queue edges[];
 
-    private OptimalPath(String filename) throws FileNotFoundException {
+    public OptimalPath(String filename) throws FileNotFoundException {
         setupInput(filename);
     }
 
-    private void setupInput(String filename) throws FileNotFoundException {
+    public void setupInput(String filename) throws FileNotFoundException {
         String currentDirectory = System.getProperty("user.dir");
 
         if (filename != null) {
@@ -42,7 +42,7 @@ public class OptimalPath {
         }
     }
 
-    private int getMaximumPath() {
+    public int getMaximumPath() {
         int result, max = 0;
 
         Iterator<Integer> iterator = edges[origin].iterator();
@@ -72,7 +72,7 @@ public class OptimalPath {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        OptimalPath optimalPath = new OptimalPath("input03.txt");
+        OptimalPath optimalPath = new OptimalPath(null);
 
         int maxPath = optimalPath.getMaximumPath();
         System.out.println("Maximum path: " + maxPath);
